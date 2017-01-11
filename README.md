@@ -1,31 +1,48 @@
-# rollup-plugin-espruino (WIP)
-
+# rollup-plugin-espruino
 
 [Rollup](https://github.com/rollup/rollup) plugin for sending bundled code to an
 [Espruino](http://www.espruino.com) device.
 
-Produces very small code from modules, with treeshaking and no overhead when
-using the `es` module format.
+Rollup produces very lean code from modules, with treeshaking and no overhead if
+using `es` as the output format. Perfect for Espruino.
 
-Bundled code is sent to the Espruino device after the file has been written to
-disk (on `bundle.write()` or if using `dest` in a configuration file). Expects
-only one bundle.
+With this plugin, bundled code will be sent to one or more Espruino devices
+after the dest file has been written to disk. That means it requires the use of
+`bundle.write()` if running Rollup from JavaScript, or `dest` if using a
+configuration file. Having the file also written to disk is a good thing, as you
+can see exactly what was sent to Espruino.
 
-Minification is recommended, which can be done with the [Uglify](https://github.com/TrySound/rollup-plugin-uglify)
-plugin. See also [this list](https://github.com/rollup/rollup/wiki/Plugins) for
-more Rollup plugins.
+The plugin exits the process when done, so it must be the last plugin. It should
+be compatible with most Rollup plugins, here are some that may be useful in an
+Espruino project:
+
+- [commonjs](https://github.com/rollup/rollup-plugin-commonjs) - adds support for [Espruino](https://www.espruino.com/Modules)/Node style modules (using `require()`)
+- [uglify](https://github.com/TrySound/rollup-plugin-uglify) - ugly minification
+- [cleanup](https://github.com/aMarCruz/rollup-plugin-cleanup) - pretty minification
+- [eslint](https://github.com/TrySound/rollup-plugin-eslint) - lints your code
+- [filesize](https://github.com/ritz078/rollup-plugin-filesize) - displays the size of the code sent to Espruino
+- [coffee-script](https://github.com/lautis/rollup-plugin-coffee-script) - `.coffee` lovers can use Espruino too!
+
+[More plugins here](https://github.com/rollup/rollup/wiki/Plugins)
 
 
 # Install
 
-Using [NPM](https://docs.npmjs.com/getting-started/installing-npm-packages-locally)
-or [Yarn](https://yarnpkg.com/en/docs/managing-dependencies#toc-adding-a-dependency),
-install the package `rollup-plugin-espruino`.
+Using NPM:
 
-Sending to Espruino devices over Bluetooth LE also requires the `noble` package.
+    npm install --save rollup-plugin-espruino
+
+Using Yarn:
+
+    yarn add rollup-plugin-espruino
+
+Sending to Espruino devices (like Puck.js) over Bluetooth LE also requires the
+[noble](https://github.com/sandeepmistry/noble) package.
 
 
-# Usage
+# Use
+
+Example configuration file (`rollup.config.js`):
 
 ```js
 import espruino from 'rollup-plugin-espruino'
@@ -36,38 +53,36 @@ export default {
   format: 'es',
   plugins: [
     espruino({
-      port: 'aa:bb:cc:dd:ee',
-      save: true,
+      port: 'aa:bb:cc:dd:ee', // or ['/dev/ttyX', 'aa:bb:cc:dd:ee']
     })
   ],
 }
 ```
 
-The above example configuration would used by Rollup's CLI command `rollup -c`
-if named `rollup.config.js`. See Rollup's documentation on its
-[CLI](https://github.com/rollup/rollup/wiki/Command-Line-Interface) and
-[JavaScript API](https://github.com/rollup/rollup/wiki/JavaScript-API) for more.
+The above configuration would used by executing the command `rollup -c`. See
+Rollup's documentation on its [CLI](https://github.com/rollup/rollup/wiki/Command-Line-Interface)
+for more.
+
+It is also possible to use Rollup's [JavaScript API](https://github.com/rollup/rollup/wiki/JavaScript-API).
+If you do, you have to write the bundle to disk using `bundle.write()` for this
+plugin to run.
 
 
 # Options
 
 ### port
 
-Specify port or device address to connect to. Required.
-
-### save
-
-Whether to save the code on the Espruino device after sending. Optional,
-defaults to `false`.
+Specify port(s) or device address(es) to connect to. May be specified as a
+string or an array of strings. Optional, defaults to the first port found.
 
 ### reset
 
-Whether to reset the Espruino device before sending. Optional, defaults to
+Whether to reset the Espruino device before sending code. Optional, defaults to
 `true`.
 
-### quiet
+### verbose
 
-Silence Espruino's output. Optional, defaults to `true`.
+Verbose output. Optional, defaults to `false`.
 
 
 # License

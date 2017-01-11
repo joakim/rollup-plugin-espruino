@@ -1,25 +1,27 @@
 {
   "name": "rollup-plugin-espruino",
-  "version": "0.1.0",
-  "description": "Sends bundle code from Rollup to an Espruino device.",
+  "version": "0.1.1",
+  "description": "Sends bundled code from Rollup to an Espruino device.",
   "author": "Joakim Stai",
   "license": "MIT",
   "main": "index.js",
-  "files": [
-    "index.js",
-    "LICENSE"
-  ],
   "repository": {
     "url": "github.com/joakimstai/rollup-plugin-espruino",
     "type": "git"
   },
+  "files": [
+    "index.js",
+    "LICENSE"
+  ],
   "engines": {
     "node": ">=4"
   },
   "dependencies": {
+    "async": "2.1.x",
     "espruino": "0.0.x"
   },
   "devDependencies": {
+    "eslint": "3.13.x",
     "noble": "1.7.x"
   },
   "keywords": [
