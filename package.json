@@ -5,10 +5,7 @@
   "author": "Joakim Stai",
   "license": "MIT",
   "main": "index.js",
-  "repository": {
-    "url": "github.com/joakimstai/rollup-plugin-espruino",
-    "type": "git"
-  },
+  "repository": "joakim/rollup-plugin-espruino",
   "files": [
     "index.js",
     "LICENSE"
