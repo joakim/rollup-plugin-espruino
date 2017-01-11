@@ -57,8 +57,7 @@ export default function espruino(options = {}) {
     name: 'espruino',
 
     onwrite(bundle, rendered) {
-      quiet((options.verbose === undefined && options.quiet) ||
-            (options.verbose !== undefined && !options.verbose))
+      quiet(!options.verbose)
 
       esp.init(() => {
         Espruino.Config.STORE_LINE_NUMBERS = false
