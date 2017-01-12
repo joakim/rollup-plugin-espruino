@@ -16,7 +16,7 @@ const optionAliases = {
   reset: 'RESET_BEFORE_SEND', // default: true
   save: 'SAVE_ON_SEND', // default: 0
   setTime: 'SET_TIME_ON_WRITE', // default: false
-  ble: 'BLUETOOTH_LOW_ENERGY', // default: true
+  BLE: 'BLUETOOTH_LOW_ENERGY', // default: true
   audio: 'SERIAL_AUDIO', // default: 0
   baudRate: 'BAUD_RATE', // default: 9600
   throttle: 'SERIAL_THROTTLE_SEND', // default: false
