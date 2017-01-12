@@ -1,12 +1,20 @@
 'use strict'
 
 import esp from 'espruino'
+import chalk from 'chalk'
 import eachSeries from 'async/eachSeries'
 
 const log = console.log
+const info = (...args) => log(chalk.yellow('info'), ...args)
+const error = (...args) => {
+  log(chalk.red('error'), ...args)
+  hasErrors = true
+}
 
 /**
- * A small hack for silencing Espruino's output, disables/enables console.log().
+ * A small hack for silencing Espruino's logging.
+ *
+ * Disables/enables console.log() and console.error().
  */
 function quiet(on) {
   console.log = console.error = (on || on === undefined ? () => {} : log)
@@ -28,9 +36,12 @@ function sendCode(port, code, done) {
   })
 
   Espruino.Core.Serial.open(port, status => {
-    if (!status) return done(`Could not connect to ${port}`)
+    if (!status) {
+      error('Could not connect to', chalk.bold(port))
+      done()
+    }
 
-    log(`Connected to ${port}`)
+    info('Connected to ' + chalk.bold(port) + ', sending code...')
 
     Espruino.Core.CodeWriter.writeToEspruino(code, () => {
       setTimeout(() => Espruino.Core.Serial.close(), 500)
@@ -41,11 +52,18 @@ function sendCode(port, code, done) {
 }
 
 /**
- * Ends the current process when done sending code (otherwise it will hang).
+ * Exits the current process when done.
+ *
+ * Otherwise the process will hang. TODO: Fix that instead of doing this.
  */
-function end(err) {
-  if (err) log(err)
-  process.exit(0)
+function exit(err) {
+  if (err || hasErrors) {
+    if (err) log(chalk.red(err))
+    process.exit(1)
+  }
+  else {
+    process.exit(0)
+  }
 }
 
 export default function espruino(options = {}) {
@@ -74,8 +92,6 @@ export default function espruino(options = {}) {
 
             sendCode(port, rendered.code, end)
           }
-          else {
-            end('No devices found')
           }
         })
       })
