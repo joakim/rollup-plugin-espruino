@@ -2,7 +2,24 @@
 
 import esp from 'espruino'
 import chalk from 'chalk'
+import defaults from 'lodash.defaults'
+import forEach from 'lodash.forEach'
 import eachSeries from 'async/eachSeries'
+
+const defaultOptions = {
+  port: undefined,
+  verbose: false,
+}
+
+const optionAliases = {
+  reset: 'RESET_BEFORE_SEND', // default: true
+  save: 'SAVE_ON_SEND', // default: 0
+  setTime: 'SET_TIME_ON_WRITE', // default: false
+  ble: 'BLUETOOTH_LOW_ENERGY', // default: true
+  audio: 'SERIAL_AUDIO', // default: 0
+  baudRate: 'BAUD_RATE', // default: 9600
+  throttle: 'SERIAL_THROTTLE_SEND', // default: false
+}
 
 const log = console.log
 const info = (...args) => log(chalk.yellow('info'), ...args)
@@ -67,6 +84,9 @@ function exit(err) {
 }
 
 export default function espruino(options = {}) {
+  defaults(options, defaultOptions)
+
+  // Ensure that the port option, if set, is an array
   if (options.port && !Array.isArray(options.port)) {
     options.port = [options.port]
   }
@@ -78,11 +98,17 @@ export default function espruino(options = {}) {
       quiet(!options.verbose)
 
       esp.init(() => {
-        Espruino.Config.STORE_LINE_NUMBERS = false
-        Espruino.Config.RESET_BEFORE_SEND = (options.reset === undefined || !!options.reset)
+        // Disable some Espruino features not relevant for this plugin
+        Espruino.Config.set('ENV_ON_CONNECT', false)
+        Espruino.Config.set('STORE_LINE_NUMBERS', false)
 
-
+        // Set any Espruino options specified using aliases or uppercase keys
+        forEach(options, (value, key) => {
+          if (optionAliases[key]) {
+            Espruino.Config.set(optionAliases[key], value)
           }
+          else if (key === key.toUpperCase()) {
+            Espruino.Config.set(key, value)
           }
         })
 
