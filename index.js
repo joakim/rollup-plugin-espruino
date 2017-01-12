@@ -8,6 +8,7 @@ import eachSeries from 'async/eachSeries'
 
 const defaultOptions = {
   port: undefined,
+  output: false,
   verbose: false,
 }
 
@@ -38,20 +39,9 @@ function quiet(on) {
 }
 
 /**
- * Sends code to an Espruino device.
+ * Sends code to an Espruino device over a serial port.
  */
 function sendCode(port, code, done) {
-  let currentLine = ''
-  Espruino.Core.Serial.startListening(function(data) {
-    data = String.fromCharCode.apply(null, new Uint8Array(data))
-    currentLine += data
-    while (~currentLine.indexOf('\n')) {
-      let i = currentLine.indexOf('\n')
-      log(currentLine.substr(0, i))
-      currentLine = currentLine.substr(i+1)
-    }
-  })
-
   Espruino.Core.Serial.open(port, status => {
     if (!status) {
       error('Could not connect to', chalk.bold(port))
@@ -67,6 +57,27 @@ function sendCode(port, code, done) {
     })
   }, () => setTimeout(done, 500))
 }
+
+/**
+ * Starts listening to serial output, optionally outputting data to terminal.
+ */
+function startListening(output) {
+  let buffer = ''
+
+  Espruino.Core.Serial.startListening(data => {
+    data = String.fromCharCode.apply(null, new Uint8Array(data))
+
+    buffer += data
+    while (~buffer.indexOf('\n')) {
+      let i = buffer.indexOf('\n')
+      let line = buffer.substr(0, i)
+
+      if (output) {
+        log(line)
+      }
+
+      buffer = buffer.substr(i + 1)
+    }
   })
 }
 
