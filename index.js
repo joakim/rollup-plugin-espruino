@@ -81,19 +81,31 @@ export default function espruino(options = {}) {
         Espruino.Config.STORE_LINE_NUMBERS = false
         Espruino.Config.RESET_BEFORE_SEND = (options.reset === undefined || !!options.reset)
 
-        Espruino.Core.Serial.getPorts(ports => {
-          if (options.port && options.port.length > 0) {
-            eachSeries(options.port, (port, done) => {
-              sendCode(port, rendered.code, done)
-            }, end)
-          }
-          else if (ports && ports.length > 0) {
-            const port = ports[0].path
 
-            sendCode(port, rendered.code, end)
           }
           }
         })
+
+        if (options.port && options.port.length > 0) {
+          eachSeries(options.port, (port, done) => {
+            startListening(options.output)
+            sendCode(port, rendered.code, done)
+          }, exit)
+        }
+        else {
+          Espruino.Core.Serial.getPorts(ports => {
+            if (ports && ports.length > 0) {
+              info('Found', chalk.bold(ports[0].type), 'device',
+                   chalk.bold(ports[0].path),
+                   '(' + ports[0].description + ')')
+              startListening(options.output)
+              sendCode(ports[0].path, rendered.code, exit)
+            }
+            else {
+              exit('No devices found')
+            }
+          })
+        }
       })
     }
   }
