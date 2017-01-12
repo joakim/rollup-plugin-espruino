@@ -22,6 +22,18 @@ const optionAliases = {
   throttle: 'SERIAL_THROTTLE_SEND', // default: false
 }
 
+const errorTypes = [
+  'Uncaught Error',
+  'Uncaught InternalError',
+  'Uncaught RangeError',
+  'Uncaught ReferenceError',
+  'Uncaught SyntaxError',
+  'Uncaught TypeError',
+  'Uncaught Warning',
+]
+
+let hasErrors = false
+
 const log = console.log
 const info = (...args) => log(chalk.yellow('info'), ...args)
 const error = (...args) => {
@@ -74,6 +86,13 @@ function startListening(output) {
 
       if (output) {
         log(line)
+      }
+      else if (~line.indexOf('Uncaught')) {
+        forEach(errorTypes, type => {
+          if (~line.indexOf(type)) {
+            error(line.slice(line.indexOf('Uncaught')))
+          }
+        })
       }
 
       buffer = buffer.substr(i + 1)
