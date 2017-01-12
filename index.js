@@ -60,11 +60,13 @@ function sendCode(port, code, done) {
 
     info('Connected to ' + chalk.bold(port) + ', sending code...')
 
-    Espruino.Core.CodeWriter.writeToEspruino(code, () => {
-      setTimeout(() => Espruino.Core.Serial.close(), 500)
+    Espruino.callProcessor('transformForEspruino', code, transformed => {
+      Espruino.Core.CodeWriter.writeToEspruino(transformed, () => {
+        setTimeout(Espruino.Core.Serial.close, 500)
+      })
     })
-  }, () => {
-    setTimeout(() => done(), 500)
+  }, () => setTimeout(done, 500))
+}
   })
 }
 
