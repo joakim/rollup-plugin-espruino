@@ -1,10 +1,8 @@
-'use strict'
-
 import esp from 'espruino'
 import chalk from 'chalk'
 import defaults from 'lodash.defaults'
 import forEach from 'lodash.forEach'
-import eachSeries from 'async/eachSeries'
+import { eachSeries } from 'async'
 
 const defaultOptions = {
   port: undefined,

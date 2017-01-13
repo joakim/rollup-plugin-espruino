@@ -4,11 +4,12 @@
   "description": "Sends bundled code from Rollup to an Espruino device.",
   "author": "Joakim Stai",
   "license": "MIT",
-  "main": "index.js",
   "repository": "joakim/rollup-plugin-espruino",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
   "files": [
-    "index.js",
-    "LICENSE"
+    "src",
+    "dist"
   ],
   "engines": {
     "node": ">=6"
@@ -20,9 +21,17 @@
     "lodash.defaults": "4.2.x",
     "lodash.foreach": "4.5.x"
   },
+  "devDependencies": {
+    "rollup": "0.41.x"
+  },
+  "scripts": {
+    "build": "rollup -c -f cjs -o dist/index.cjs.js && rollup -c -f es -o dist/index.es.js",
+    "prebuild": "rm -rf dist/*"
+  },
   "keywords": [
-    "rollup-plugin",
     "espruino",
-    "puck.js"
+    "puck.js",
+    "rollup-plugin",
+    "rollup"
   ]
 }
