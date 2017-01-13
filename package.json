@@ -5,6 +5,9 @@
   "author": "Joakim Stai",
   "license": "MIT",
   "repository": "joakim/rollup-plugin-espruino",
+  "bugs": {
+    "url": "https://github.com/joakim/rollup-plugin-espruino/issues"
+  },
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "files": [
