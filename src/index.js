@@ -1,7 +1,7 @@
 import esp from 'espruino'
 import chalk from 'chalk'
 import defaults from 'lodash.defaults'
-import forEach from 'lodash.forEach'
+import forEach from 'lodash.foreach'
 import { eachSeries } from 'async'
 
 const defaultOptions = {
