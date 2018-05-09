@@ -51,9 +51,11 @@ Example configuration file (`rollup.config.js`):
 import espruino from 'rollup-plugin-espruino'
 
 export default {
-  entry: 'src/main.js',
-  dest: 'dist/bundle.js',
-  format: 'es',
+  input: 'src/main.js',
+  output: {
+    file:   'dist/bundle.js',
+    format: 'es',
+  },
   plugins: [
     espruino({
       port: 'aa:bb:cc:dd:ee', // or ['/dev/ttyX', 'aa:bb:cc:dd:ee']
