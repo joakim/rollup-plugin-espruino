@@ -1,6 +1,6 @@
 # rollup-plugin-espruino
 
-[Rollup](https://github.com/rollup/rollup) plugin for sending bundled code to an
+[Rollup](https://rollupjs.org/) plugin for sending bundled code to an
 [Espruino](http://www.espruino.com) device.
 
 Rollup produces very lean code from modules, with treeshaking and no overhead if
