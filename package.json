@@ -2,7 +2,7 @@
   "name": "rollup-plugin-espruino",
   "version": "0.2.1",
   "description": "Sends bundled code from Rollup to an Espruino device.",
-  "author": "Joakim Stai",
+  "author": "Joakim",
   "license": "MIT",
   "repository": "joakim/rollup-plugin-espruino",
   "bugs": {
