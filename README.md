@@ -1,5 +1,11 @@
 # rollup-plugin-espruino
 
+### Deprecated
+
+Use [rollup-plugin-espruino-modules](https://github.com/opichals/rollup-plugin-espruino-modules) or [EspruinoTools' built-in rollup support](https://github.com/espruino/EspruinoTools/pull/80) instead ([discussion](https://forum.espruino.com/comments/15063250/)).
+
+---
+
 [Rollup](https://rollupjs.org/) plugin for sending bundled code to an
 [Espruino](http://www.espruino.com) device.
 
